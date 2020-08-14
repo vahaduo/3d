@@ -156,7 +156,7 @@ var vm = new Vue({
       },
       modeBarButtonsToAdd: [
         {
-          name: 'Toggle projection: ortographic / perspective',
+          name: 'Toggle projection: orthographic / perspective',
           icon: Plotly.Icons.drawrect,
           click: function(gd) {
             let projection = 'orthographic';
