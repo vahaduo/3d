@@ -1,1 +1,110 @@
-
+<!DOCTYPE html>
+<html>
+<!-- 
+https://github.com/vahaduo/
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Three-dimensional visualization of West Eurasian modern and ancient human genetic variation.">
+  <title>Vahaduo: Eurogenes West Eurasia PCA 3D Viewer</title>
+  <link rel="stylesheet" href="stylesheet.css">
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11" defer></script>
+  <script src="ancient.js"></script>
+  <script src="modern.js"></script>
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <div class="flex-container">
+    <div class="panel" id="app">
+      <header><div>Vahaduo:<br>Eurogenes<br>West Eurasia PCA<br>3D Viewer</div></header>
+      <div class="panel-section buttons">
+	      <button v-for="(item, index) in ['X:', 'Y:', 'Z:', 'Color:']" type="button" v-bind:class="{'active': activeTab == index}" v-on:click="activeTab == index ? reversePC (index) : activeTab = index">
+          <span class="color-accent">{{item}}</span> PC{{activePC[index] + 1}}
+        </button>
+      </div>
+      <div class="panel-section dimensions">
+        <button v-for="n in dimensions" type="button" v-on:click="switchPC(n - 1)" v-bind:class="{'active': activePC[activeTab] == n - 1}">
+          PC{{n}}
+        </button>
+      </div>
+      <div class="panel-section custom-points">
+      	<button type="button" v-on:click="customPoints()" v-bind:class="{'active': activeCustomPoints}">
+          {{activeCustomPoints ? 'Clear' : 'Add'}} Custom Points
+        </button>
+      </div>
+      <div class="panel-section tag">
+	      <input ref="taginput" v-on:keyup.enter="tag()" v-model.trim="inputValue" :disabled="activeTag" spellcheck="false" type="text" placeholder=" Type parts of names.">
+	      <button ref="tagbutton" type="button" v-on:keyup.enter="tag()" v-on:click="tag()" v-bind:class="{'active': activeTag}">
+          {{activeTag ? 'Clear' : 'Tag'}}
+        </button>
+      </div>
+      <div class="panel-section labels">
+      	<button type="button" v-on:click="clearLabels()" v-bind:class="{'active': isLabClearBtnActive}">
+          Clear {{clearLabBtnTxt}}
+        </button>
+      	<button type="button" v-on:click="labelsMode == 4 ? labelsMode = 0 : labelsMode = labelsMode + 1">
+          {{labBtnTxt}} 
+        </button>
+      </div>
+      <div class="panel-section highlight">
+        <button type="button" v-on:click="highlightMode == 2 ? highlightMode = 0 : highlightMode = highlightMode + 1">
+          Highlight: {{highlightMode == 0 ? 'Off' : highlightMode == 1 ? 'Hover' : 'Click'}} 
+        </button>
+        <button type="button" v-on:click="currentHighlight == 8 ? currentHighlight = 1 : currentHighlight = currentHighlight + 1; highlightColor = trace[0].marker.line.colorscale[currentHighlight][1]" v-bind:style="{color: highlightColor}">
+          &#9679;
+        </button>
+        <button type="button"  v-bind:class="{'active': highlighted.length > 0}" v-on:click="highlighted = []; updateHighlight([])">
+          Clear
+        </button>
+      </div>
+      <div v-bind:class="['modal-container', {'modal-show' : modalOpen}]" v-on:click.self="modalOpen = false">
+        <div class="modal modal-custom">
+          <div class="modal-header">
+          <button type="button" v-on:click="modalOpen = false">
+            <div>×</div>
+          </button>
+          </div>
+          <textarea ref="modaltextarea" v-model="textareaValue" v-on:input="textareaValid ? null : textareaValid = true" v-bind:class="{'invalid': textareaValid == false}" spellcheck="false" placeholder=" Paste Eurogenes West Eurasia PCA coordinates here."></textarea>
+          <div class="modal-footer">
+          <button type="button" v-on:click="modalOpen = false">
+            Cancel
+          </button>
+          <button type="button" v-on:click="textareaValue = ''; textareaValid = true; $refs.modaltextarea.focus();">
+            Clear
+          </button>
+          <button type="button" v-on:click="loadCustomPoints()">
+            Load
+          </button>
+          </div>
+        </div>
+      </div>
+      <div v-bind:class="['modal-container', {'modal-show' : modalSaveOpen}]" v-on:click.self="modalSaveOpen = false">
+        <div class="modal modal-save">
+          <div class="modal-header">
+          <button type="button" v-on:click="modalSaveOpen = false">
+            <div>×</div>
+          </button>
+          </div>
+          <span>Width:</span>
+          <input onfocus="this.select()" v-on:keyup.enter="savePlot()" v-model.trim="saveWidth" v-on:input="saveWidthValid ? null : saveWidthValid = true" v-bind:class="{'invalid': saveWidthValid == false}" spellcheck="false" type="text" placeholder=" Width">
+          <span>Height:</span>
+          <input onfocus="this.select()" v-on:keyup.enter="savePlot()" v-model.trim="saveHeight" v-on:input="saveHeightValid ? null : saveHeightValid = true" v-bind:class="{'invalid': saveHeightValid == false}" spellcheck="false" type="text" placeholder=" Height">
+          <div class="modal-footer">
+          <button type="button" v-on:click="modalSaveOpen = false">
+            Cancel
+          </button>
+          <button type="button" v-on:click="setSaveSize()">
+            Reset
+          </button>
+          <button type="button" v-on:click="savePlot()">
+            Save
+          </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="plot" id="graphDiv"></div>
+  </div>
+</body>
