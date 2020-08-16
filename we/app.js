@@ -149,7 +149,7 @@ var vm = new Vue({
       responsive: true,
       toImageButtonOptions: {
         format: 'png',
-        filename: 'Vahaduo_Eurogenes_G25_3D',
+        filename: 'Vahaduo_Eurogenes_WE_3D',
         height: 1200,
         width: 1600,
         scale: 1
