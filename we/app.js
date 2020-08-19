@@ -21,6 +21,7 @@ var vm = new Vue({
     unhover: null,
     labelsMode: 2,
     highlightMode: 2,
+    bigger: 0,
     customPointsSize: 22,
     autoLabelsLimit: 250,
     autoAnnotationsLimit: 20,
@@ -122,7 +123,7 @@ var vm = new Vue({
       plot_bgcolor: 'rgba(0,0,0,0)',
       scene: {
         annotations: [],
-        aspectmode: 'cube',
+        aspectmode: 'data',
       	bgcolor: 'rgba(0,0,0,0)',
         xaxis: {
           color: '#444444'
@@ -156,12 +157,41 @@ var vm = new Vue({
       },
       modeBarButtonsToAdd: [
         {
+          name: 'Toggle aspect mode: cube / data',
+          icon: Plotly.Icons.drawrect,
+          click: function(gd) {
+            let aspectmode = 'cube';
+            if (vm.layout.scene.aspectmode == 'cube') aspectmode = 'data';
+            Plotly.relayout(gd, {'scene.aspectmode' : aspectmode});
+          }
+        },
+        {
           name: 'Toggle projection: orthographic / perspective',
           icon: Plotly.Icons.drawrect,
           click: function(gd) {
             let projection = 'orthographic';
             if (vm.layout.scene.camera.projection.type == 'orthographic') projection = 'perspective';
             Plotly.relayout(gd, {'scene.camera.projection.type' : projection});
+          }
+        },
+        {
+          name: 'Toggle marker size',
+          icon: Plotly.Icons.drawcircle,
+          click: function(gd) {
+            if (vm.bigger < 2) {
+              vm.bigger++;
+              for (item in vm.trace[0].marker.size) {
+                vm.trace[0].marker.size[item] += (vm.trace[0].marker.symbol[item].indexOf('circle') > -1 ? 1 : 2);
+                vm.size[item] += (vm.symbol[item].indexOf('circle') > -1 ? 1 : 2);
+              }
+            } else {
+              vm.bigger = 0;
+              for (item in vm.trace[0].marker.size) {
+                vm.trace[0].marker.size[item] -= (vm.trace[0].marker.symbol[item].indexOf('circle') > -1 ? 2 : 4);
+                vm.size[item] -= (vm.symbol[item].indexOf('circle') > -1 ? 2 : 4);
+              }
+            }
+            Plotly.restyle(gd, {'marker.size': [vm.trace[0].marker.size]}, 0);
           }
         },
         {
@@ -336,7 +366,7 @@ var vm = new Vue({
           for (let i = 0, len = this.trace[0].text.length; i < len; i++) {
             for (let item of filters) {
               if (this.trace[0].text[i].indexOf(item) !== -1) {
-                sizes[i] = 10;
+                sizes[i] = 10 + (this.bigger * 2);
                 symbols[i] = 'x';
                 if (
                       (this.labelsMode == 2 && this.labels.indexOf(i) < 0) ||
@@ -426,7 +456,7 @@ var vm = new Vue({
         }
       }
       if (this.validateCoordinates(data, this.dimensions)) {
-        this.importData(data, 'cross', this.customPointsSize);
+        this.importData(data, 'cross', this.customPointsSize + (this.bigger * 2));
         this.activeCustomPoints = true;
         if (this.labelsMode == 2 || this.labelsMode == 4) {
           for (let i = 0, j = data.length; i < j; i++) {
@@ -650,8 +680,8 @@ var vm = new Vue({
     for (let i = 0; i < this.dimensions; i++) {
       this.PCs.push([]);
     }
-    this.importData(modern, 'circle-open', 3);
-    this.importData(ancient, 'circle', 2);
+    this.importData(modern, 'circle-open', 3 + this.bigger);
+    this.importData(ancient, 'circle', 2 + this.bigger);
     this.pointsNum = this.size.length;
   },
   watch: {
