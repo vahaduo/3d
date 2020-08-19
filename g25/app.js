@@ -1,6 +1,12 @@
 var vm = new Vue({
   el: '#app',
   data: {
+    eigenvalues: [
+      129.557,103.13,14.222,10.433,9.471,
+      7.778,5.523,5.325,4.183,3.321,
+      2.637,2.246,2.21,1.894,1.842,
+      1.758,1.7,1.605,1.58,1.564,
+      1.557,1.529,1.519,1.452,1.434],
     dimensions: 25,
     activeTab: 0,
     activePC: [1, 2, 0, 2], // X, Y, Z, Color
@@ -21,6 +27,7 @@ var vm = new Vue({
     unhover: null,
     labelsMode: 2,
     highlightMode: 2,
+    bigger: 0,
     customPointsSize: 22,
     autoLabelsLimit: 250,
     autoAnnotationsLimit: 20,
@@ -156,12 +163,41 @@ var vm = new Vue({
       },
       modeBarButtonsToAdd: [
         {
+          name: 'Toggle aspect mode: cube / data',
+          icon: Plotly.Icons.drawrect,
+          click: function(gd) {
+            let aspectmode = 'cube';
+            if (vm.layout.scene.aspectmode == 'cube') aspectmode = 'data';
+            Plotly.relayout(gd, {'scene.aspectmode' : aspectmode});
+          }
+        },
+        {
           name: 'Toggle projection: orthographic / perspective',
           icon: Plotly.Icons.drawrect,
           click: function(gd) {
             let projection = 'orthographic';
             if (vm.layout.scene.camera.projection.type == 'orthographic') projection = 'perspective';
             Plotly.relayout(gd, {'scene.camera.projection.type' : projection});
+          }
+        },
+        {
+          name: 'Toggle marker size',
+          icon: Plotly.Icons.drawcircle,
+          click: function(gd) {
+            if (vm.bigger < 2) {
+              vm.bigger++;
+              for (item in vm.trace[0].marker.size) {
+                vm.trace[0].marker.size[item] += (vm.trace[0].marker.symbol[item].indexOf('circle') > -1 ? 1 : 2);
+                vm.size[item] += (vm.symbol[item].indexOf('circle') > -1 ? 1 : 2);
+              }
+            } else {
+              vm.bigger = 0;
+              for (item in vm.trace[0].marker.size) {
+                vm.trace[0].marker.size[item] -= (vm.trace[0].marker.symbol[item].indexOf('circle') > -1 ? 2 : 4);
+                vm.size[item] -= (vm.symbol[item].indexOf('circle') > -1 ? 2 : 4);
+              }
+            }
+            Plotly.restyle(gd, {'marker.size': [vm.trace[0].marker.size]}, 0);
           }
         },
         {
@@ -336,7 +372,7 @@ var vm = new Vue({
           for (let i = 0, len = this.trace[0].text.length; i < len; i++) {
             for (let item of filters) {
               if (this.trace[0].text[i].indexOf(item) !== -1) {
-                sizes[i] = 10;
+                sizes[i] = 10 + (this.bigger * 2);
                 symbols[i] = 'x';
                 if (
                       (this.labelsMode == 2 && this.labels.indexOf(i) < 0) ||
@@ -363,6 +399,11 @@ var vm = new Vue({
       }
     },
     importData: function (data, symbol, size) {
+      for (let item in data) {
+        for (let item2 in data[item]) {
+          if (item2 != 0) {data[item][item2] = Number((data[item][item2] * this.eigenvalues[item2 - 1]).toFixed(6))}
+        }
+      }
       for (let i = 0, len = data.length; i < len; i++) {
         this.trace[0].text.push(data[i][0]);
         this.symbol.push(symbol);
@@ -426,7 +467,7 @@ var vm = new Vue({
         }
       }
       if (this.validateCoordinates(data, this.dimensions)) {
-        this.importData(data, 'cross', this.customPointsSize);
+        this.importData(data, 'cross', this.customPointsSize + (this.bigger * 2));
         this.activeCustomPoints = true;
         if (this.labelsMode == 2 || this.labelsMode == 4) {
           for (let i = 0, j = data.length; i < j; i++) {
@@ -645,13 +686,16 @@ var vm = new Vue({
 
   },
   created: function () {
+    for (let item in this.eigenvalues) {
+      this.eigenvalues[item] = Math.sqrt(this.eigenvalues[item]);
+    }
     this.trace[0].marker.colorscale = this.colorscales[this.currentColorscale][0];
     this.defBackgroundColor = this.layout.paper_bgcolor;
     for (let i = 0; i < this.dimensions; i++) {
       this.PCs.push([]);
     }
-    this.importData(modern, 'circle-open', 3);
-    this.importData(ancient, 'circle', 2);
+    this.importData(modern, 'circle-open', 3 + this.bigger);
+    this.importData(ancient, 'circle', 2 + this.bigger);
     this.pointsNum = this.size.length;
   },
   watch: {
