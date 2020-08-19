@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html>
+<!-- 
+https://github.com/vahaduo/
+-->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Three-dimensional visualization of global modern and ancient human genetic variation.">
+  <title>Vahaduo: PCA 3D Viewer</title>
+  <style type="text/css">
+    html, body {
+      height: 100%;
+      margin: 0px;
+      font-size: calc(0.5vw + 12px);
+      font-family: "Open Sans", sans-serif;
+      color: #d8d8d8;
+      overflow: hidden;
+    }
+    .flex-container {
+      background-color: #1c1c1c;
+      display: flex;
+      min-height: 100%;
+      height: 100%;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      overflow-y: auto;
+    }
+    header {
+      width: 15rem;
+      display: flex;
+      justify-content: left;
+      padding-top: 1.8rem;
+      padding-bottom: 1.8rem;
+      box-shadow: 1px 1px 5px #131313;
+      margin: 1rem;
+    }
+    header > div {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      border-left: solid;
+      border-width: 0.2rem;
+      border-color: #ff8f00;
+      padding-left: 0.4rem;
+      margin-left: 2rem;
+    }
+    header span {
+      color: #ff8f00;
+    }
+    .color-we {
+      border-color: #0061d6;
+    }
+    .color-g25 {
+      border-color: #fed725;
+    }
+    .padd-we-g25 {
+      padding-top: 2.3rem;
+      padding-bottom: 2.3rem;
+    }
+    a {
+      color: inherit;
+      text-decoration: inherit;
+    }
+  </style>
+</head>
+<body>
+  <div class="flex-container">
+    <a href="we"><header class="padd-we-g25"><div class="color-we">Vahaduo:<br>Eurogenes<br>West Eurasia PCA<br>3D Viewer</div></header></a>
+    <a href="g25"><header class="padd-we-g25"><div class="color-g25">Vahaduo:<br>Eurogenes<br>Global 25 PCA<br>3D Viewer</div></header></a>
+    <a href="g25/westeurasia"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>West Eurasia</span><br>3D Viewer</div></header></a>
+    <a href="g25/europe"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Europe</span><br>3D Viewer</div></header></a>
+    <a href="g25/northeurope"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>North Europe</span><br>3D Viewer</div></header></a>
+    <a href="g25/northeurasia"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>North Eurasia</span><br>3D Viewer</div></header></a>
+    <a href="g25/eastasia"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>East Asia</span><br>3D Viewer</div></header></a>
+    <a href="g25/southasia"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>South Asia</span><br>3D Viewer</div></header></a>
+    <a href="g25/caucasusneareast"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Caucasus - Near East</span><br>3D Viewer</div></header></a>
+    <a href="g25/africa"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Africa</span><br>3D Viewer</div></header></a>
+  </div>
+</body>
