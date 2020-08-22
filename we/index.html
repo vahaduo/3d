@@ -18,7 +18,7 @@ https://github.com/vahaduo/
 <body>
   <div class="flex-container">
     <div class="panel" id="app">
-      <header><div><a href="https://vahaduo.github.io/3d/">Vahaduo:<br>Eurogenes<br>West Eurasia PCA<br>3D Viewer</a></div></header>
+      <header><div><a href="https://vahaduo.github.io/3d/" target="_blank">Vahaduo:<br>Eurogenes<br>West Eurasia PCA<br>3D Viewer</a></div></header>
       <div class="panel-section buttons">
         <button v-for="(item, index) in ['X:', 'Y:', 'Z:', 'Color:']" type="button" v-bind:class="{'active': activeTab == index}" v-on:click="activeTab == index ? reversePC (index) : activeTab = index">
           <span class="color-accent">{{item}}</span> PC{{activePC[index] + 1}}
