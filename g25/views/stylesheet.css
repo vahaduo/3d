@@ -46,6 +46,14 @@ header > div {
   padding-left: 0.4rem;
 }
 
+a, a:link, a:visited, a:hover, a:active {
+  font-size: inherit;
+  font-weight: inherit;
+  font-family: inherit;
+  color: inherit;
+  text-decoration: inherit;
+}
+
 button {
   border: none;
   padding: 0.16rem;
@@ -60,7 +68,6 @@ button {
 .color-accent, header span {
   color: #ff8f00;
 }
-
 
 .tag > button, .dimensions > button, .custom-points > button, .modal-footer > button, .labels > button, .highlight > button {
   box-sizing: border-box;
@@ -100,9 +107,6 @@ button {
   flex-wrap: wrap;
 }
 
-.tag {
-}
-
 .tag > button, .labels > button:nth-of-type(1) {
   width: 38%;
 }
@@ -118,7 +122,6 @@ button {
 .panel-section > button.active, .panel-section > button:hover:not([disabled="disabled"]), .modal-footer > button:hover {
   border-color: #ff8f00;
 }
-
 
 input, textarea {
   box-sizing: border-box;
@@ -173,11 +176,13 @@ input:disabled {
   z-index: 1000;
   display: none;
 }
+
 .modal {
   display: flex;
   flex-direction: column;
   background-color: #1c1c1c;
 }
+
 .modal-custom {
   width: 80vw;
   min-height: 80vh;
@@ -186,20 +191,24 @@ input:disabled {
   margin-top: 10vh;
   margin-bottom: 10vh;
 }
+
 .modal-save {
   width: 15rem;
   height: 10rem;
 }
+
 .modal-save > span {
   font-size: 0.7rem;
   padding-left: 0.4rem;
   color: #757575;
 }
+
 .modal-save > input {
   margin-left: 0px;
   margin-right: 0px;
   border: none;
 }
+
 .modal-show {
   display: flex;
   justify-content: center;
@@ -217,6 +226,7 @@ input:disabled {
   padding-right: 0.4rem;
   padding-left: 0.4rem;
 }
+
 .modal-header > button:hover {
   color: #ff8f00;
 }

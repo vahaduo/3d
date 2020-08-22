@@ -62,11 +62,11 @@ var vm = new Vue({
       ],
     trace: [
       {
-	      text: [],
-	      x: [],
-      	y: [],
-      	z: [],
-	      mode: 'markers',
+        text: [],
+        x: [],
+        y: [],
+        z: [],
+        mode: 'markers',
         hoverlabel: {
           bgcolor: 'rgba(255,255,255,0)',
           bordercolor: 'rgba(255,255,255,0)',
@@ -74,11 +74,11 @@ var vm = new Vue({
             color: 'rgba(255,255,255,0.9)'
           }
         },
-      	marker: {
-      	  size: [],
-      	  symbol: [],
+        marker: {
+          size: [],
+          symbol: [],
           color: [],
-	        colorscale: '',
+          colorscale: '',
           reversescale: false,
           opacity: 1,
           line: {
@@ -98,25 +98,25 @@ var vm = new Vue({
               ['1.0', 'magenta']
             ]
           }
-	      },
+        },
         type: 'scatter3d',
-	      name: 'Points',
-	      hoverinfo: 'text'
+        name: 'Points',
+        hoverinfo: 'text'
       },
       {
-	      text: [],
-	      x: [],
-      	y: [],
-      	z: [],
-	      mode: 'text',
+        text: [],
+        x: [],
+        y: [],
+        z: [],
+        mode: 'text',
         type: 'scatter3d',
-	      name: 'Labels',
-	      hoverinfo: 'text',
-	      textposition: 'middle right',
-	      textfont: {
-	        color: '#eeeeee',
-	        size: 11
-	      }
+        name: 'Labels',
+        hoverinfo: 'text',
+        textposition: 'middle right',
+        textfont: {
+          color: '#eeeeee',
+          size: 11
+        }
       }
     ],
     layout: {
@@ -132,7 +132,7 @@ var vm = new Vue({
       scene: {
         annotations: [],
         aspectmode: 'data',
-      	bgcolor: 'rgba(0,0,0,0)',
+        bgcolor: 'rgba(0,0,0,0)',
         xaxis: {
           color: '#444444'
         },
@@ -142,11 +142,11 @@ var vm = new Vue({
         zaxis: {
           color: '#444444'
         },
-	      camera: {
-	        projection: {
-	          type: 'perspective'
-	        }
-	      }
+        camera: { 
+          projection: {
+            type: 'perspective'
+          }
+        }
       }
     },
     options: {
@@ -302,19 +302,19 @@ var vm = new Vue({
     react: function () {
       let newTrace = [
         {
-  	      text: [],
-  	      x: [],
-        	y: [],
-        	z: [],
-  	      mode: 'text',
+          text: [],
+          x: [],
+          y: [],
+          z: [],
+          mode: 'text',
           type: 'scatter3d',
-  	      name: 'Labels',
-  	      hoverinfo: 'text',
-  	      textposition: 'middle right',
-  	      textfont: {
-  	        color: this.backgroundColor > 1 ? '#111111' : '#eeeeee',
-  	        size: 11
-  	      }
+          name: 'Labels',
+          hoverinfo: 'text',
+          textposition: 'middle right',
+          textfont: {
+            color: this.backgroundColor > 1 ? '#111111' : '#eeeeee',
+            size: 11
+          }
         }
       ];
       for (let item of this.labels) {
@@ -334,14 +334,14 @@ var vm = new Vue({
     },
     switchPC: function (PC) {
       if (this.activeTab == 3) {
-	      this.activePC[this.activeTab] = PC;
+        this.activePC[this.activeTab] = PC;
       } else {
-	      for (let i = 0; i < 3; i++) {
-	        if (this.activePC[i] == PC && i != this.activeTab) {
-	          this.activePC[i] = this.activePC[this.activeTab];
-	        }
-	      }
-	      this.activePC[this.activeTab] = PC;
+        for (let i = 0; i < 3; i++) {
+          if (this.activePC[i] == PC && i != this.activeTab) {
+            this.activePC[i] = this.activePC[this.activeTab];
+          }
+        }
+        this.activePC[this.activeTab] = PC;
       }
       this.activePC = this.activePC.slice();
       this.plot();
@@ -730,7 +730,9 @@ var vm = new Vue({
     for (let i = 0; i < this.dimensions; i++) {
       this.PCs.push([]);
     }
-    this.importData(modern, 'circle-open', 3 + this.bigger);
+    if (modern.length > 0) {
+      this.importData(modern, 'circle-open', 3 + this.bigger); 
+    }
     this.importData(ancient, 'circle', 2 + this.bigger);
     this.pointsNum = this.size.length;
   },

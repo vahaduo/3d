@@ -22,9 +22,9 @@ https://github.com/vahaduo/
 <body>
   <div class="flex-container">
     <div class="panel" id="app">
-      <header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Caucasus - Near East</span><br>3D Viewer</div></header>
+      <header><div><a href="https://vahaduo.github.io/3d/" target="_blank">Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Caucasus - Near East</span><br>3D Viewer</a></div></header>
       <div class="panel-section buttons">
-	      <button v-for="(item, index) in ['X:', 'Y:', 'Z:', 'Color:']" type="button" v-bind:class="{'active': activeTab == index}" v-on:click="activeTab == index ? reversePC (index) : activeTab = index">
+        <button v-for="(item, index) in ['X:', 'Y:', 'Z:', 'Color:']" type="button" v-bind:class="{'active': activeTab == index}" v-on:click="activeTab == index ? reversePC (index) : activeTab = index">
           <span class="color-accent">{{item}}</span> PC{{activePC[index] + 1}}
         </button>
       </div>
@@ -36,21 +36,21 @@ https://github.com/vahaduo/
         </button>
       </div>
       <div class="panel-section custom-points">
-      	<button type="button" v-on:click="customPoints()" v-bind:class="{'active': activeCustomPoints}">
+        <button type="button" v-on:click="customPoints()" v-bind:class="{'active': activeCustomPoints}">
           {{activeCustomPoints ? 'Clear' : 'Add'}} Custom Points
         </button>
       </div>
       <div class="panel-section tag">
-	      <input ref="taginput" v-on:keyup.enter="tag()" v-model.trim="inputValue" :disabled="activeTag" spellcheck="false" type="text" placeholder=" Type parts of names.">
-	      <button ref="tagbutton" type="button" v-on:keyup.enter="tag()" v-on:click="tag()" v-bind:class="{'active': activeTag}">
+        <input ref="taginput" v-on:keyup.enter="tag()" v-model.trim="inputValue" :disabled="activeTag" spellcheck="false" type="text" placeholder=" Type parts of names.">
+        <button ref="tagbutton" type="button" v-on:keyup.enter="tag()" v-on:click="tag()" v-bind:class="{'active': activeTag}">
           {{activeTag ? 'Clear' : 'Tag'}}
         </button>
       </div>
       <div class="panel-section labels">
-      	<button type="button" v-on:click="clearLabels()" v-bind:class="{'active': isLabClearBtnActive}">
+        <button type="button" v-on:click="clearLabels()" v-bind:class="{'active': isLabClearBtnActive}">
           Clear {{clearLabBtnTxt}}
         </button>
-      	<button type="button" v-on:click="labelsMode == 4 ? labelsMode = 0 : labelsMode = labelsMode + 1">
+        <button type="button" v-on:click="labelsMode == 4 ? labelsMode = 0 : labelsMode = labelsMode + 1">
           {{labBtnTxt}} 
         </button>
       </div>
