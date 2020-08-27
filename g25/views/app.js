@@ -717,6 +717,11 @@ var vm = new Vue({
       this.eigenvalues[item] = Math.sqrt(this.eigenvalues[item]);
     }
     this.bigger = bigger;
+    if (navigator.userAgent.indexOf('Gecko') > -1 
+        && navigator.userAgent.indexOf('like Gecko') < 0) {
+    } else {
+      this.bigger++;
+    }
     this.activePC = activePC;
     let merged = modern.concat(ancient), 
       names = this.namesOut(merged);
