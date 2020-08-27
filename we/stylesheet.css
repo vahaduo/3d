@@ -56,7 +56,7 @@ a, a:link, a:visited, a:hover, a:active {
 
 button {
   border: none;
-  padding: 0.16rem;
+  padding: 0.16rem 0 0.16rem 0;
   font-size: 0.62rem;
   color: inherit;
   text-transform: uppercase;
