@@ -74,7 +74,7 @@ button {
   box-sizing: border-box;
   margin: 1%;
   border: solid;
-  border-width: 0.1rem;
+  border-width: thin;
   border-color: #323232;
 }
 
@@ -94,7 +94,7 @@ button {
 
 .buttons > button {
   border-bottom: solid;
-  border-width: 0.1rem;
+  border-width: thin;
   border-color: transparent;
 }
 
@@ -138,7 +138,7 @@ input, textarea {
 
 input {
   border: solid;
-  border-width: 0.1rem;
+  border-width: thin;
   border-color: #323232;
   flex-grow: 1;
   text-align: center;
