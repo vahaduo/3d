@@ -8,7 +8,6 @@ var vm = new Vue({
       2.637,2.246,2.21,1.894,1.842,
       1.758,1.7,1.605,1.58,1.564,
       1.557,1.529,1.519,1.452,1.434],
-    variance: [],
     dimensions: 25,
     activeTab: 0,
     activePC: [0, 1, 2, 2], // X, Y, Z, Color
@@ -29,7 +28,6 @@ var vm = new Vue({
     unhover: null,
     labelsMode: 2,
     highlightMode: 2,
-    bigger: 0,
     customPointsSize: 22,
     autoLabelsLimit: 250,
     autoAnnotationsLimit: 20,
@@ -62,11 +60,11 @@ var vm = new Vue({
       ],
     trace: [
       {
-        text: [],
-        x: [],
-        y: [],
-        z: [],
-        mode: 'markers',
+	      text: [],
+	      x: [],
+      	y: [],
+      	z: [],
+	      mode: 'markers',
         hoverlabel: {
           bgcolor: 'rgba(255,255,255,0)',
           bordercolor: 'rgba(255,255,255,0)',
@@ -74,11 +72,11 @@ var vm = new Vue({
             color: 'rgba(255,255,255,0.9)'
           }
         },
-        marker: {
-          size: [],
-          symbol: [],
+      	marker: {
+      	  size: [],
+      	  symbol: [],
           color: [],
-          colorscale: '',
+	        colorscale: '',
           reversescale: false,
           opacity: 1,
           line: {
@@ -98,25 +96,25 @@ var vm = new Vue({
               ['1.0', 'magenta']
             ]
           }
-        },
+	      },
         type: 'scatter3d',
-        name: 'Points',
-        hoverinfo: 'text'
+	      name: 'Points',
+	      hoverinfo: 'text'
       },
       {
-        text: [],
-        x: [],
-        y: [],
-        z: [],
-        mode: 'text',
+	      text: [],
+	      x: [],
+      	y: [],
+      	z: [],
+	      mode: 'text',
         type: 'scatter3d',
-        name: 'Labels',
-        hoverinfo: 'text',
-        textposition: 'middle right',
-        textfont: {
-          color: '#eeeeee',
-          size: 11
-        }
+	      name: 'Labels',
+	      hoverinfo: 'text',
+	      textposition: 'middle right',
+	      textfont: {
+	        color: '#eeeeee',
+	        size: 11
+	      }
       }
     ],
     layout: {
@@ -132,7 +130,7 @@ var vm = new Vue({
       scene: {
         annotations: [],
         aspectmode: 'data',
-        bgcolor: 'rgba(0,0,0,0)',
+      	bgcolor: 'rgba(0,0,0,0)',
         xaxis: {
           color: '#444444'
         },
@@ -142,11 +140,11 @@ var vm = new Vue({
         zaxis: {
           color: '#444444'
         },
-        camera: { 
-          projection: {
-            type: 'perspective'
-          }
-        }
+	      camera: {
+	        projection: {
+	          type: 'perspective'
+	        }
+	      }
       }
     },
     options: {
@@ -180,26 +178,6 @@ var vm = new Vue({
             let projection = 'orthographic';
             if (vm.layout.scene.camera.projection.type == 'orthographic') projection = 'perspective';
             Plotly.relayout(gd, {'scene.camera.projection.type' : projection});
-          }
-        },
-        {
-          name: 'Toggle marker size',
-          icon: Plotly.Icons.drawcircle,
-          click: function(gd) {
-            if (vm.bigger < 2) {
-              vm.bigger++;
-              for (item in vm.trace[0].marker.size) {
-                vm.trace[0].marker.size[item] += (vm.trace[0].marker.symbol[item].indexOf('circle') > -1 ? 1 : 2);
-                vm.size[item] += (vm.symbol[item].indexOf('circle') > -1 ? 1 : 2);
-              }
-            } else {
-              vm.bigger = 0;
-              for (item in vm.trace[0].marker.size) {
-                vm.trace[0].marker.size[item] -= (vm.trace[0].marker.symbol[item].indexOf('circle') > -1 ? 2 : 4);
-                vm.size[item] -= (vm.symbol[item].indexOf('circle') > -1 ? 2 : 4);
-              }
-            }
-            Plotly.restyle(gd, {'marker.size': [vm.trace[0].marker.size]}, 0);
           }
         },
         {
@@ -302,19 +280,19 @@ var vm = new Vue({
     react: function () {
       let newTrace = [
         {
-          text: [],
-          x: [],
-          y: [],
-          z: [],
-          mode: 'text',
+  	      text: [],
+  	      x: [],
+        	y: [],
+        	z: [],
+  	      mode: 'text',
           type: 'scatter3d',
-          name: 'Labels',
-          hoverinfo: 'text',
-          textposition: 'middle right',
-          textfont: {
-            color: this.backgroundColor > 1 ? '#111111' : '#eeeeee',
-            size: 11
-          }
+  	      name: 'Labels',
+  	      hoverinfo: 'text',
+  	      textposition: 'middle right',
+  	      textfont: {
+  	        color: this.backgroundColor > 1 ? '#111111' : '#eeeeee',
+  	        size: 11
+  	      }
         }
       ];
       for (let item of this.labels) {
@@ -334,14 +312,14 @@ var vm = new Vue({
     },
     switchPC: function (PC) {
       if (this.activeTab == 3) {
-        this.activePC[this.activeTab] = PC;
+	      this.activePC[this.activeTab] = PC;
       } else {
-        for (let i = 0; i < 3; i++) {
-          if (this.activePC[i] == PC && i != this.activeTab) {
-            this.activePC[i] = this.activePC[this.activeTab];
-          }
-        }
-        this.activePC[this.activeTab] = PC;
+	      for (let i = 0; i < 3; i++) {
+	        if (this.activePC[i] == PC && i != this.activeTab) {
+	          this.activePC[i] = this.activePC[this.activeTab];
+	        }
+	      }
+	      this.activePC[this.activeTab] = PC;
       }
       this.activePC = this.activePC.slice();
       this.plot();
@@ -374,7 +352,7 @@ var vm = new Vue({
           for (let i = 0, len = this.trace[0].text.length; i < len; i++) {
             for (let item of filters) {
               if (this.trace[0].text[i].indexOf(item) !== -1) {
-                sizes[i] = 10 + (this.bigger * 2);
+                sizes[i] = 10;
                 symbols[i] = 'x';
                 if (
                       (this.labelsMode == 2 && this.labels.indexOf(i) < 0) ||
@@ -472,7 +450,7 @@ var vm = new Vue({
       let data = this.textareaValue
         .replace(/[<>\/\\\"\';\`]/g, '')
         .replace(/[^\S\r\n]+/g, '')
-        .replace(/\n\n+/, '\n')
+        .replace(/\n\n+/g, '\n')
         .trim(),
         newLabels = [];
       if (data.length == 0) {
@@ -494,7 +472,7 @@ var vm = new Vue({
             if (item2 != 0) {data[item][item2] = Number((data[item][item2] * this.eigenvalues[item2 - 1]).toFixed(6))}
           }
         }
-        this.importData(data, 'cross', this.customPointsSize + (this.bigger * 2));
+        this.importData(data, 'cross', this.customPointsSize);
         this.activeCustomPoints = true;
         if (this.labelsMode == 2 || this.labelsMode == 4) {
           for (let i = 0, j = data.length; i < j; i++) {
@@ -716,18 +694,11 @@ var vm = new Vue({
     for (let item in this.eigenvalues) {
       this.eigenvalues[item] = Math.sqrt(this.eigenvalues[item]);
     }
-    this.bigger = bigger;
-    if (navigator.userAgent.indexOf('Gecko') > -1 
-        && navigator.userAgent.indexOf('like Gecko') < 0) {
-    } else {
-      this.bigger++;
-    }
     this.activePC = activePC;
     let merged = modern.concat(ancient), 
       names = this.namesOut(merged);
     this.pca = new ML.PCA(merged);
     this.dimensions = this.pca.U.columns;
-    this.variance = this.pca.getExplainedVariance();
     this.namesIn(merged, names);
     this.trace[0].marker.colorscale = this.colorscales[this.currentColorscale][0];
     this.defBackgroundColor = this.layout.paper_bgcolor;
@@ -735,10 +706,8 @@ var vm = new Vue({
     for (let i = 0; i < this.dimensions; i++) {
       this.PCs.push([]);
     }
-    if (modern.length > 0) {
-      this.importData(modern, 'circle-open', 3 + this.bigger); 
-    }
-    this.importData(ancient, 'circle', 2 + this.bigger);
+    this.importData(modern, 'circle-open', 3);
+    this.importData(ancient, 'circle', 2);
     this.pointsNum = this.size.length;
   },
   watch: {
