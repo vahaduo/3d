@@ -16,12 +16,12 @@ https://github.com/vahaduo/
       font-family: "Open Sans", sans-serif;
       color: #d8d8d8;
       overflow: hidden;
+      background-color: #1c1c1c;
     }
     .flex-container {
-      background-color: #1c1c1c;
       display: flex;
-      min-height: 100%;
-      height: 100%;
+      min-height: calc(100vh - 2rem);
+      height: calc(100vh - 2rem);
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
@@ -31,8 +31,8 @@ https://github.com/vahaduo/
       width: 15rem;
       display: flex;
       justify-content: left;
-      padding-top: 1.8rem;
-      padding-bottom: 1.8rem;
+      padding-top: 1.5rem;
+      padding-bottom: 1.5rem;
       box-shadow: 1px 1px 5px #131313;
       margin: 1rem;
     }
@@ -48,6 +48,26 @@ https://github.com/vahaduo/
     header span {
       color: #ff8f00;
     }
+    nav {
+      height: 2rem;
+      width: 100vw;
+      display: flex;
+      padding: 0 0 0 1rem;
+      margin: 0;
+      box-shadow: 1px 1px 5px #131313;
+      align-items: center;
+      justify-content: left;
+      text-transform: uppercase;
+      font-size: 0.8rem;
+    }
+    .left-arrow {
+      border: solid #d8d8d8;
+      border-width: 0.2rem 0.2rem 0 0;
+      padding: 0.2rem;
+      display: inline-block;
+      transform: rotate(225deg);
+      -webkit-transform: rotate(225deg);
+    }
     .color-we {
       border-color: #0061d6;
     }
@@ -55,8 +75,8 @@ https://github.com/vahaduo/
       border-color: #fed725;
     }
     .padd-we-g25 {
-      padding-top: 2.3rem;
-      padding-bottom: 2.3rem;
+      padding-top: 2rem;
+      padding-bottom: 2rem;
     }
     a {
       color: inherit;
@@ -65,16 +85,23 @@ https://github.com/vahaduo/
   </style>
 </head>
 <body>
+  <nav>
+    <a href="https://vahaduo.github.io" title="Go to Vahaduo App Gallery">
+      <div>
+        <i class="left-arrow"></i><i class="left-arrow"></i>&nbsp;Vahaduo&nbsp;App&nbsp;Gallery
+      </div>
+    </a>
+  </nav>
   <div class="flex-container">
-    <a href="we"><header class="padd-we-g25"><div class="color-we">Vahaduo:<br>Eurogenes<br>West Eurasia PCA<br>3D Viewer</div></header></a>
-    <a href="g25"><header class="padd-we-g25"><div class="color-g25">Vahaduo:<br>Eurogenes<br>Global 25 PCA<br>3D Viewer</div></header></a>
-    <a href="g25/westeurasia"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>West Eurasia</span><br>3D Viewer</div></header></a>
-    <a href="g25/europe"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Europe</span><br>3D Viewer</div></header></a>
-    <a href="g25/northeurope"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>North Europe</span><br>3D Viewer</div></header></a>
-    <a href="g25/northeurasia"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>North Eurasia</span><br>3D Viewer</div></header></a>
-    <a href="g25/eastasia"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>East Asia</span><br>3D Viewer</div></header></a>
-    <a href="g25/southasia"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>South Asia</span><br>3D Viewer</div></header></a>
-    <a href="g25/caucasusneareast"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Caucasus - Near East</span><br>3D Viewer</div></header></a>
-    <a href="g25/africa"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Africa</span><br>3D Viewer</div></header></a>
+    <a href="we" title="Vahaduo: Eurogenes West Eurasia PCA 3D Viewer"><header class="padd-we-g25"><div class="color-we">Vahaduo:<br>Eurogenes<br>West Eurasia PCA<br>3D Viewer</div></header></a>
+    <a href="g25" title="Vahaduo: Eurogenes Global 25 PCA 3D Viewer"><header class="padd-we-g25"><div class="color-g25">Vahaduo:<br>Eurogenes<br>Global 25 PCA<br>3D Viewer</div></header></a>
+    <a href="g25/westeurasia" title="Vahaduo: Eurogenes Global 25 PCA West Eurasia 3D Viewer"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>West Eurasia</span><br>3D Viewer</div></header></a>
+    <a href="g25/europe" title="Vahaduo: Eurogenes Global 25 PCA Europe 3D Viewer"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Europe</span><br>3D Viewer</div></header></a>
+    <a href="g25/northeurope" title="Vahaduo: Eurogenes Global 25 PCA North Europe 3D Viewer"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>North Europe</span><br>3D Viewer</div></header></a>
+    <a href="g25/northeurasia" title="Vahaduo: Eurogenes Global 25 PCA North Eurasia 3D Viewer"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>North Eurasia</span><br>3D Viewer</div></header></a>
+    <a href="g25/eastasia" title="Vahaduo: Eurogenes Global 25 PCA East Asia 3D Viewer"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>East Asia</span><br>3D Viewer</div></header></a>
+    <a href="g25/southasia" title="Vahaduo: Eurogenes Global 25 PCA South Asia 3D Viewer"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>South Asia</span><br>3D Viewer</div></header></a>
+    <a href="g25/caucasusneareast" title="Vahaduo: Eurogenes Global 25 PCA Caucasus - Near East 3D Viewer"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Caucasus - Near East</span><br>3D Viewer</div></header></a>
+    <a href="g25/africa" title="Vahaduo: Eurogenes Global 25 PCA Africa 3D Viewer"><header><div>Vahaduo:<br>Eurogenes<br>Global 25 PCA<br><span>Africa</span><br>3D Viewer</div></header></a>
   </div>
 </body>
