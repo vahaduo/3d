@@ -439,7 +439,7 @@ var vm = new Vue({
       let data = this.textareaValue
         .replace(/[<>\/\\\"\';\`]/g, '')
         .replace(/[^\S\r\n]+/g, '')
-        .replace(/\n\n+/, '\n')
+        .replace(/\n\n+/g, '\n')
         .trim(),
         newLabels = [];
       if (data.length == 0) {
