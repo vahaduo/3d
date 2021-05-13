@@ -1,3 +1,35 @@
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #00000066 #1c1c1c00;
+}
+
+textarea {
+  cursor: auto;
+  scrollbar-width: auto;
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+textarea::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: #1c1c1c00;
+}
+
+*::-webkit-scrollbar-thumb {
+  background-color: #00000066;
+}
+
+*::-webkit-scrollbar-corner {
+  background: #1c1c1c00;
+}
+
 html, body {
   height: 100%;
   margin: 0px;
@@ -91,7 +123,7 @@ button {
   margin-bottom: 0.7rem;
 }
 
-.buttons > button {
+.buttons > button, .headerbutton {
   border-bottom: solid;
   border-width: thin;
   border-color: transparent;
@@ -107,7 +139,7 @@ button {
   flex-wrap: wrap;
 }
 
-.tag > button, .labels > button:nth-of-type(1) {
+.tag > button, .labels > button:nth-of-type(1), .highlight > button:nth-of-type(-n+2) {
   width: 38%;
 }
 
@@ -115,11 +147,11 @@ button {
   width: 18%;
 }
 
-.tag > input, .labels > button:nth-of-type(2), .highlight > button:nth-of-type(1) {
+.tag > input, .labels > button:nth-of-type(2) {
   width: 58%;
 }
 
-.panel-section > button.active, .panel-section > button:hover, .modal-footer > button:hover {
+.headerbutton.active, .headerbutton:hover, .panel-section > button.active, .panel-section > button:hover:not([disabled="disabled"]), .modal-footer > button:hover {
   border-color: #fed725;
 }
 
@@ -182,6 +214,7 @@ input:disabled {
   flex-direction: column;
   background-color: #1c1c1c;
 }
+
 .modal-custom {
   width: 80vw;
   min-height: 80vh;
@@ -216,17 +249,27 @@ input:disabled {
 
 .modal-header {
   flex-grow: 0;
-  text-align: right;
+  text-align: left;
+  font-size: 0.62rem;
+  padding: 0.25rem;
+}
+
+.modal-header > button:first-of-type {
+  color: #fed725;
 }
 
 .modal-header > button {
-  font-size: 0.8rem;
-  font-weight: bold;
   padding-right: 0.4rem;
   padding-left: 0.4rem;
 }
 
-.modal-header > button:hover {
+.modal-header > button:last-of-type {
+  font-weight: bold;
+  font-size: 0.8rem;
+  float: right;
+}
+
+.modal-header > button:last-of-type:hover {
   color: #fed725;
 }
 
@@ -252,6 +295,10 @@ input:disabled {
 
 .hovertext {
   fill-opacity: 0.65;
+}
+
+.dnone {
+  display: none;
 }
 
 @media only screen and (max-width: 600px) {

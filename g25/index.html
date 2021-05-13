@@ -49,24 +49,51 @@ https://github.com/vahaduo/
         </button>
       </div>
       <div class="panel-section highlight">
-        <button type="button" v-on:click="highlightMode == 2 ? highlightMode = 0 : highlightMode = highlightMode + 1">
-          Highlight: {{highlightMode == 0 ? 'Off' : highlightMode == 1 ? 'Hover' : 'Click'}} 
+        <button type="button" v-bind:class="{'dnone' : newLine > 0}" v-on:click="highLine == 1 ? highLine = 0 : highLine = 1">
+          {{highLine == 0 ? 'Highlight' : 'Line'}} 
         </button>
-        <button type="button" v-on:click="currentHighlight == 8 ? currentHighlight = 1 : currentHighlight = currentHighlight + 1; highlightColor = trace[0].marker.line.colorscale[currentHighlight][1]" v-bind:style="{color: highlightColor}">
+        <button type="button" v-bind:class="['active', {'dnone' : newLine == 0}]" v-on:click="lineCancel()">
+          Cancel 
+        </button>
+        <button type="button" v-bind:class="{'dnone' : highLine == 1}" v-on:click="highlightMode == 2 ? highlightMode = 0 : highlightMode = highlightMode + 1">
+          {{highlightMode == 0 ? 'Off' : highlightMode == 1 ? 'Hover' : 'Click'}} 
+        </button>
+        <button type="button" v-bind:class="{'dnone' : highLine == 1}"  v-on:click="currentHighlight == 8 ? currentHighlight = 1 : currentHighlight = currentHighlight + 1; highlightColor = trace[0].marker.line.colorscale[currentHighlight][1]" v-bind:style="{color: highlightColor}">
           &#9679;
         </button>
-        <button type="button"  v-bind:class="{'active': highlighted.length > 0}" v-on:click="highlighted = []; updateHighlight([])">
+        <button type="button" v-bind:class="{'active': highlighted.length > 0, 'dnone' : highLine == 1}" v-on:click="highlighted = []; updateHighlight([])">
+          Clear
+        </button>
+        <button type="button" v-bind:class="{'dnone' : highLine == 0 || newLine > 0}" v-on:click="lineMode == 2 ? lineMode = 0 : lineMode =  lineMode + 1">
+          {{lineMode == 0 ? 'Add' : lineMode == 1 ? 'Del' : 'Off'}} 
+        </button>
+        <button type="button" v-bind:class="{'active' : newLine > 1, 'dnone' : highLine == 0 || newLine == 0}" v-on:click="lineAdd()">
+          {{newLine > 1 ? 'OK' : 'Add'}} 
+        </button>
+        <button type="button" v-bind:class="{'dnone' : highLine == 0}"  v-on:click="currentLineColor == 8 ? currentLineColor = 1 : currentLineColor = currentLineColor + 1" v-bind:style="{color: trace[0].marker.line.colorscale[currentLineColor][1]}">
+          &#9679;
+        </button>
+        <button type="button" v-bind:class="{'active': lines.length > 0, 'dnone' : highLine == 0}" v-on:click="lineClear()">
           Clear
         </button>
       </div>
       <div v-bind:class="['modal-container', {'modal-show' : modalOpen}]" v-on:click.self="modalOpen = false">
         <div class="modal modal-custom">
           <div class="modal-header">
+          <button disabled="disabled">
+          Coordinates: 
+          </button><!--
+          --><button type="button" v-bind:class="['headerbutton', {'active' : !rawCoords}]" v-on:click="rawCoords = false">
+            Scaled
+          </button><!--
+          --><button type="button" v-bind:class="['headerbutton', {'active' : rawCoords}]" v-on:click="rawCoords = true">
+            Raw
+          </button>
           <button type="button" v-on:click="modalOpen = false">
             <div>×</div>
           </button>
           </div>
-          <textarea ref="modaltextarea" v-model="textareaValue" v-on:input="textareaValid ? null : textareaValid = true" v-bind:class="{'invalid': textareaValid == false}" spellcheck="false" placeholder=" Paste non-scaled Eurogenes Global 25 PCA coordinates here."></textarea>
+          <textarea ref="modaltextarea" v-model="textareaValue" v-on:input="textareaValid ? null : textareaValid = true" v-bind:class="{'invalid': textareaValid == false}" spellcheck="false" placeholder=" Paste Eurogenes Global 25 PCA coordinates here."></textarea>
           <div class="modal-footer">
           <button type="button" v-on:click="modalOpen = false">
             Cancel

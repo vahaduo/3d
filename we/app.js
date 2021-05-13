@@ -21,6 +21,11 @@ var vm = new Vue({
     unhover: null,
     labelsMode: 2,
     highlightMode: 2,
+    highLine: 0,
+    lineMode: 0,
+    newLine: 0,
+    newLineColor: 1,
+    lineCount: 0,
     bigger: 0,
     customPointsSize: 22,
     autoLabelsLimit: 250,
@@ -29,6 +34,7 @@ var vm = new Vue({
     currentColorscale: 0,
     currentHighlight: 1,
     highlightColor: 'white',
+    currentLineColor: 1,
     colorscales: [
       [[
         ['0.0', 'rgb(30,54,180)'],
@@ -94,6 +100,19 @@ var vm = new Vue({
         type: 'scatter3d',
         name: 'Points',
         hoverinfo: 'text'
+      },
+      {
+        x: [],
+        y: [],
+        z: [],
+        mode: 'lines',
+        type: 'scatter3d',
+        name: 'Lines',
+        hoverinfo: 'skip',
+        line: {
+            width: 5,
+        },
+        transforms: []
       },
       {
         text: [],
@@ -230,7 +249,10 @@ var vm = new Vue({
             if (vm.currentHighlight == 1) {
               vm.highlightColor = newDefHiColor;
             }
-            Plotly.update(gd, {'textfont.color': newTextColor}, layoutUpdate, 1);
+            Plotly.update(gd, {'textfont.color': newTextColor}, layoutUpdate, 2);
+            if (vm.lines.length > 0) {
+              vm.react();
+            }
           }
         },
         {
@@ -262,7 +284,8 @@ var vm = new Vue({
     size: [],
     symbol: [],
     labels: [],
-    highlighted: []
+    highlighted: [],
+    lines: []
   },
   methods: {
     plot: function () {
@@ -309,6 +332,24 @@ var vm = new Vue({
           }
         }
       ];
+      let newLineTrace = {
+        x: [],
+        y: [],
+        z: [],
+        mode: 'lines',
+        type: 'scatter3d',
+        name: 'Lines',
+        opacity: 0.66,
+        hoverinfo: 'skip',
+        line: {
+          width: 5,
+        },
+        transforms: [{
+          type: 'groupby',
+          groups: [],
+          styles: []
+        }]
+      }
       for (let item of this.labels) {
         newTrace[0].x.push(this.trace[0].x[item]);
         newTrace[0].y.push(this.trace[0].y[item]);
@@ -320,8 +361,25 @@ var vm = new Vue({
         item.y = this.trace[0].y[item.pointId];
         item.z = this.trace[0].z[item.pointId];
       }
+      for (let item of this.lines) {
+        if (item.linePoints.length > 1) {
+          for (let item2 of item.linePoints) {
+            newLineTrace.x.push(this.trace[0].x[item2]);
+            newLineTrace.y.push(this.trace[0].y[item2]);
+            newLineTrace.z.push(this.trace[0].z[item2]);
+            newLineTrace.transforms[0].groups.push(item.lineId);
+          }
+          newLineTrace.transforms[0].styles.push({
+            target: item.lineId, value: {line: {color: this.trace[0].marker.line.colorscale[item.lineColor][1]}}
+          })
+        }
+      }
+      if (newLineTrace.x.length == 0) {
+        newLineTrace.transforms = [];
+      }
+      this.trace[1] = newLineTrace;
       Plotly.react('graphDiv', this.trace , this.layout, this.options);
-      Plotly.deleteTraces('graphDiv', 1);
+      Plotly.deleteTraces('graphDiv', 2);
       Plotly.addTraces('graphDiv', newTrace);
     },
     switchPC: function (PC) {
@@ -427,6 +485,20 @@ var vm = new Vue({
             newAnnotations.push(item);
           }
         }
+        let newLines = [];
+        let pointsNumber = this.pointsNum;
+        function checkPoints (test) {
+          return test < this.pointsNum;
+        }
+        for (let item of this.lines) {
+           if (item.linePoints.every(checkPoints, this)) {
+            newLines.push(item);
+          }
+        }
+        if (this.lines.length > 0 && !(this.lines[this.lines.length-1].linePoints.every(checkPoints, this))) {
+          this.newLine = 0;
+        }
+        this.lines = newLines;
         this.layout.scene.annotations = newAnnotations;
         this.activeCustomPoints = false;
         this.plot();
@@ -493,7 +565,7 @@ var vm = new Vue({
       let tn = Number(tnpn[0]), pn = Number(tnpn[1]);
       if (tn == 0 && this.labels.indexOf(pn) < 0) {
         this.labels.push(pn);
-      } else if (tn == 1) {
+      } else if (tn == 2) {
         this.labels.splice(pn, 1);
       } else if (tn == 0 && this.labels.indexOf(pn) > -1) {
         this.labels.splice(this.labels.indexOf(pn), 1);
@@ -512,7 +584,7 @@ var vm = new Vue({
     addAnnotation: function (tnpn) {
       tnpn = tnpn.split(':');
       let tn = Number(tnpn[0]), pn = Number(tnpn[1]), push = true;
-      if (tn == 1) {
+      if (tn == 2) {
         pn = this.labels[pn];
       }
       for (let item in this.layout.scene.annotations) {
@@ -555,7 +627,7 @@ var vm = new Vue({
     attachEvents: function () {
       let plotNode = document.getElementById('graphDiv');
       plotNode.on('plotly_click', function(data) {
-        if (vm.labelsMode > 0 || vm.highlightMode == 2) {
+        if (vm.labelsMode > 0 || vm.highlightMode == 2 || vm.highLine == 1) {
           let tn = data.points[0].curveNumber,
             pn = data.points[0].pointNumber,
             tnpn = tn.toString() + ':' + pn.toString();
@@ -630,9 +702,62 @@ var vm = new Vue({
         this.saveWidthValid = false;
       }
       if (this.saveHeightValid && this.saveWidthValid) {
-        Plotly.downloadImage('graphDiv',{format:'png',height:this.saveHeight,width:this.saveWidth,filename:'Vahaduo_Eurogenes_G25_3D',scale:1});
+        Plotly.downloadImage('graphDiv',{format:'png',height:this.saveHeight,width:this.saveWidth,filename:'Vahaduo_Eurogenes_WE_3D',scale:1});
         this.modalSaveOpen = false;
       }
+    },
+    line: function (tnpn) {
+      tnpn = tnpn.split(':');
+      let tn = Number(tnpn[0]), pn = Number(tnpn[1]);
+      if (tn == 0) {
+        if (this.lineMode == 0) {
+          if (this.newLine == 0) {
+            this.lineCount++;
+            this.lines.push({
+              lineId: this.lineCount,
+              lineColor: this.currentLineColor,
+              linePoints: []
+            })
+          }
+          if (this.lines[this.lines.length-1].linePoints.length == 0 || 
+              this.lines[this.lines.length-1].linePoints.slice(-1)[0] != pn) {
+            this.lines[this.lines.length-1].linePoints.push(pn);
+            this.newLine++;
+          }
+        } else {
+          let newLines = [];
+          for (let item of this.lines) {
+            let retain = true;
+            for (let item2 of item.linePoints) {
+              if (item2 == pn) {
+                retain = false;
+              }
+            }
+            if (retain) {
+              newLines.push(item);
+            }
+          }
+          this.lines = newLines;
+        }
+      }
+    },
+    lineCancel: function () {
+      this.lines.pop();
+      this.newLine = 0;
+      this.react();
+    },
+    lineAdd: function () {
+      if (this.newLine < 2) {
+        this.lineCancel();
+        this.lineMode = 1;
+      } else {
+        this.newLine = 0;
+      }
+    },
+    lineClear: function () {
+      this.lines = [];
+      this.newLine = 0;
+      this.react();
     }
   },
   computed: {
@@ -671,8 +796,7 @@ var vm = new Vue({
         case 4:
           return 'Annotations: Auto';
       }
-    },
-
+    }
   },
   created: function () {
     if (navigator.userAgent.indexOf('Gecko') > -1 
@@ -702,15 +826,18 @@ var vm = new Vue({
         } else if (this.labelsMode > 2) {
           this.addAnnotation(this.clicked);
         }
-        if (this.highlightMode == 2) {
+        if (this.highlightMode == 2 && this.highLine == 0) {
           this.highlightClicked(this.clicked);
+        }
+        if (this.highLine == 1 && this.lineMode < 2) {
+          this.line(this.clicked);
         }
         this.react();
         this.clicked = null;        
       }
     },
     hover: function () {
-      if (this.hover !== null && this.highlightMode > 0) {
+      if (this.hover !== null && this.highlightMode > 0 && this.highLine == 0) {
         this.highlightHover(this.hover);  
       }
     }
