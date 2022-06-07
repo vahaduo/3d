@@ -183,7 +183,7 @@ textarea {
   overflow: auto;
   white-space: pre;
   margin: 0px;
-  font-family: mono;
+  font-family: monospace;
 }
 
 .invalid {
